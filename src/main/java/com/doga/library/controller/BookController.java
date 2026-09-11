@@ -12,7 +12,10 @@ import jakarta.validation.Valid;
 
 @RestController //http üzerinden gelen isteklere cevap verecek. REST Controlller
 @RequestMapping("/books")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = {
+        "http://localhost:8081",
+        "https://library-keeper-65.lovable.app"
+})
 
 public class BookController {
 
