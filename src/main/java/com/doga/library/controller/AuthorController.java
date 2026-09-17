@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/authors")
 @CrossOrigin(origins = {
+        "http://localhost:8080",
         "http://localhost:8081",
         "https://library-keeper-65.lovable.app"
 })
