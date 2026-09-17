@@ -5,9 +5,9 @@ import com.doga.library.entity.Author;
 import com.doga.library.exception.ResourceNotFoundException;
 import com.doga.library.mapper.AuthorMapper;
 import com.doga.library.repository.AuthorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AuthorService {
@@ -20,16 +20,27 @@ public class AuthorService {
         this.authorMapper = authorMapper;
     }
 
-    public List<AuthorDTO> getAllAuthors() {
-        return authorRepository.findAll()
-                .stream()
-                .map(authorMapper::toDTO)
-                .toList();
+    public Page<AuthorDTO> getAllAuthors(Pageable pageable, String search) {
+
+        Page<Author> authors;
+
+        if (search == null || search.isBlank()) {
+            authors = authorRepository.findAll(pageable);
+        } else {
+            authors =
+                    authorRepository
+                            .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                                    search, search, pageable);
+        }
+
+        return authors.map(authorMapper::toDTO);
     }
 
     public AuthorDTO getAuthorById(Long id) {
-        Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+        Author author =
+                authorRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
 
         return authorMapper.toDTO(author);
     }
@@ -40,8 +51,10 @@ public class AuthorService {
 
     public Author updateAuthor(Long id, Author newAuthor) {
 
-        Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+        Author author =
+                authorRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
 
         author.setFirstName(newAuthor.getFirstName());
         author.setLastName(newAuthor.getLastName());
@@ -50,11 +63,11 @@ public class AuthorService {
     }
 
     public void deleteAuthor(Long id) {
-        Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
+        Author author =
+                authorRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
 
         authorRepository.delete(author);
     }
 }
-
-
