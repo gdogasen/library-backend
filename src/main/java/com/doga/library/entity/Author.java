@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Entity
-
 public class Author {
 
     @Id

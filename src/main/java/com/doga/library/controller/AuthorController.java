@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
+import com.doga.library.dto.AuthorDTO;
+
 import java.util.List;
 
 @RestController
@@ -23,13 +25,13 @@ public class AuthorController {
 
     @GetMapping
 
-    public List<Author> getAllAuthors(){
+    public List<AuthorDTO> getAllAuthors(){
 
         return authorService.getAllAuthors();
     }
 
     @GetMapping("/{id}")
-    public Author getAuthorById(@PathVariable Long id){
+    public AuthorDTO getAuthorById(@PathVariable Long id){
         return authorService.getAuthorById(id);
     }
 
